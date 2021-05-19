@@ -21,6 +21,13 @@ commandvar = (")")
 yescom = 0
 count1 = 0
 #command function it should find what command ur doin then do it
+#Find in the API where you can look at the beginning of the message and...
+#see if it has the variable that u can change for the beginning of the message
+#IF non exist try to find how to make into string and look at that string for it
+#Think small first, make simply 2 commands they can be hard codded its ok.
+#Just make 1 to change the variable and 1 to set the announcement channel
+#Get ur upload working so itll @ people when you upload (Why u need the announcement command)
+#Fun features can come later first get the basics!
 async def commsearch(pmsg,msg):
   if any(word in msg for word in MainCommands):
     if ((msg) == ")help"):
