@@ -41,6 +41,13 @@ async def on_ready():
   channel = client.get_channel(828470652368977962)
   await channel.send("I've started")
 
+@client.event
+async def update():
+  #do this work? tryn to make a void update taht checks youtube for my upload,
+  #there is probably a less ickie way but im too dumb rn keep on learning dingus
+
+
+
 #On every message this is run
 @client.event
 async def on_message(msg):
