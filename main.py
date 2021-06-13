@@ -15,11 +15,11 @@ print ("Starting Up...")
 
 client = discord.Client()
 
-MainCommands = ["help","youtube","twitch"]
-cmdout=["**)help** it helps, **)youtube** gives my yt, **)twitch** gives my twitch","https://www.youtube.com/channel/UC1t5jysqg7S1Pwsb-MAZi7Q","https://www.twitch.tv/grey_eag"]
+MainCommands = ["help","youtube","twitch","var change"]
 commandvar = (")")
 yescom = 0
 count1 = 0
+cmdout=["**" + commandvar + "help** it helps, **" + commandvar + "youtube** gives my yt, **"+ commandvar +"twitch** gives my twitch","https://www.youtube.com/channel/UC1t5jysqg7S1Pwsb-MAZi7Q","https://www.twitch.tv/grey_eag","You ran change var command"]
 #command function it should find what command ur doin then do it
 #Find in the API where you can look at the beginning of the message and...
 #see if it has the variable that u can change for the beginning of the message
@@ -38,15 +38,44 @@ async def commsearch(pmsg,msg):
 async def on_ready():
   print ("Bot has started and We have logged in as {0.user}".format(client))
   print ("\n-------------------------------------------------------------\n")
-  channel = client.get_channel(828470652368977962)
-  await channel.send("I've started")
+  general = client.fetchchannel(general)
+  #announcements = client.fectchchannel(announcements)
+  await general.send("Hello World! :)")
 
-@client.event
-async def update():
-  #do this work? tryn to make a void update taht checks youtube for my upload,
-  #there is probably a less ickie way but im too dumb rn keep on learning dingus
+#YT CODE FROM https://stackoverflow.com/questions/43118114/notified-when-youtube-video-is-uploaded-api
+
+  youtube=build('youtube','v3',developerKey=os.getenv("googlekey"))
+  req=youtube.playlistItems().list(playlistId="844936644523065354",part='snippet',maxResults=1)
+  res=req.execute()
+  vedioid=res['items'][0]['snippet']['resourceId']['videoId']
+  link="https://www.youtube.com/channel/UC1t5jysqg7S1Pwsb-MAZi7Q"
+  ch=await client.fetch_channel(844938598449283073)
+  await ch.send(link)
+  yt.start()#Starting tasks loop which is made below for checking every minu
 
 
+@tasks.loop(seconds=60)
+async def yt():
+  youtube=build('youtube','v3',developerKey='Enter your key here')
+  req=youtube.playlistItems().list(
+      playlistId='844936644523065354',
+      part='snippet',
+      maxResults=1
+  )
+  res=req.execute()
+  vedioid=res['items'][0]['snippet']['resourceId']['videoId']
+  link="https://www.youtube.com/watch?v="+vedioid
+  ch=await client.fetch_channel(844938598449283073)
+
+  async for message in ch.history(limit=1):#looping through the channel to get  the latest message i can do this using last message also but I prefer using channel.history        
+    if str(link) != str(message.content):
+      ch2=await client.fetch_channel(844936644523065354)
+        
+      await ch2.send(f'@everyone,**User** just posted a vedio!Go and check it out!\n{link}')
+      
+      await ch.send(link2)#this is important as after posting the video the link must also be posted to the check channel so that the bot do not send other link
+    else:
+      pass
 
 #On every message this is run
 @client.event
@@ -92,4 +121,3 @@ async def on_message(msg):
     #print (str(msga) + "\n" + cmsg + " : not a command\n")
 #these get the keys for the APIs
 client.run(os.getenv("token"))
-client.run(os.getenv("googlekey"))
