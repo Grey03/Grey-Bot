@@ -120,4 +120,11 @@ async def on_message(msg):
     #this is kinda a log for me to see in the console
     #print (str(msga) + "\n" + cmsg + " : not a command\n")
 #these get the keys for the APIs
+
+#GAVEN GREY EAGLESON!
+#MAKE
+#A
+#COMMAND
+#LIBRARY
+#OR DIE
 client.run(os.getenv("token"))
